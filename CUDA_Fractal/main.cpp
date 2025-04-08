@@ -51,5 +51,7 @@ int main(){
     seq[0] = false;
     seq[1] = true;
     lyapunovKernelLauncher(data, seq, W, H, NX, NY, NUM_ITERATIONS);
-    // save_pgm(data)
+    save_ppm("result.ppm", data, NX, NY);
+    free(data);
+    free(seq);
 }
