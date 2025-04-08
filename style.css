@@ -1,11 +1,79 @@
-*{
-    border: 0px;
-    margin: 0px;
-    padding: 0px;
-}
+
 canvas{
     position: absolute;
     background-color: black;
     height: 100%;
     width: 100%;
 }
+
+/* Reset default margin/padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    height: 100%;
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9f9f9;
+  }
+  
+  /* Style canvas to fill screen */
+  #projectCanvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  /* Optional: floating settings panel */
+  #settingsPanel {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    max-width: 300px;
+  }
+  
+  #settingsPanel h2 {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+  }
+  
+  input {
+    width: 100%;
+    padding: 0.4rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  
+  button {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  

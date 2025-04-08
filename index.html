@@ -7,7 +7,32 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+    <div id="settingsPanel">
+        <h2>Simulation Parameters</h2>
+        <div class="form-group">
+            <label for="rStart">r Start</label>
+            <input type="number" id="rStart" step="0.01" value="0" />
+          </div>
+          <div class="form-group">
+            <label for="rEnd">r End</label>
+            <input type="number" id="rEnd" step="0.01" value="4" />
+          </div>
+          
+        <div class="form-group">
+          <label for="dr">Δr (dr)</label>
+          <input type="number" id="dr" step="0.0001" value="0.0002" />
+        </div>
+        <div class="form-group">
+          <label for="convergeIterations">Converge Iterations</label>
+          <input type="number" id="convergeIterations" value="400" />
+        </div>
+        <div class="form-group">
+          <label for="outputIterations">Output Iterations</label>
+          <input type="number" id="outputIterations" value="2000" />
+        </div>
+        <button id="submitBtn">Run Simulation</button>
+      </div>
+      
     <canvas id="projectCanvas"></canvas>
     <script src="main.js"></script>
 

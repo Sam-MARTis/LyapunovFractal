@@ -7,6 +7,32 @@ if(!ctx){
     throw Error("Context unable to be found");
 }
 
+const rStartInput = document.getElementById("rStart") as HTMLInputElement;
+const rEndInput = document.getElementById("rEnd") as HTMLInputElement;
+const drInput = document.getElementById("dr") as HTMLInputElement;
+const convergeIterationsInput = document.getElementById("convergeIterations") as HTMLInputElement;
+const outputIterationsInput = document.getElementById("outputIterations") as HTMLInputElement;
+const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement;
+
+
+let rStart = 0;
+let rEnd = 4;
+let dr = 0.002;
+let convergeIterations = 400;
+let outputIterations = 2000;
+
+
+const getUserMenuInputAndRender = () => {
+    rStart = parseFloat(rStartInput.value);
+    rEnd = parseFloat(rEndInput.value);
+    dr = parseFloat(drInput.value);
+    convergeIterations = parseInt(convergeIterationsInput.value);
+    outputIterations = parseInt(outputIterationsInput.value);
+    console.log(rStart, rEnd, dr, convergeIterations, outputIterations);
+    const rVals = initializeXAxis(rStart, rEnd, dr);
+    render(rVals, convergeIterations, outputIterations);
+
+}
 
 //Step size
 const RSU_W = 0.8 //Ratio of screen width used
@@ -123,14 +149,16 @@ const render = (rVals: number[], convergeIterations: number, outputIterations: n
     console.log("done");
 }
 
-const dr = 0.002 
+// const dr = 0.002 
 
 const rVals = initializeXAxis(0, 4, dr);
-const convergeIterations = 400;
-const outputIterations = 2000;
+// const convergeIterations = 400;
+// const outputIterations = 2000;
 // const iterations = 1000;
 
 render(rVals, convergeIterations, outputIterations);
+
+submitBtn.addEventListener("click", getUserMenuInputAndRender);
 
 
 
