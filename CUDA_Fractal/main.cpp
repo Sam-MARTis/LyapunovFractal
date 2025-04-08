@@ -5,10 +5,10 @@
 #include <iostream>
 #include <fstream>
 #include <cstdint>
-#define W 256
-#define H 256
-#define NX 256
-#define NY 256
+#define W 10.0f
+#define H 10.0f
+#define NX 128*8
+#define NY 128*8
 #define SEQUENCE_LENGTH 2
 
 #define NUM_ITERATIONS 1000
@@ -53,7 +53,9 @@ int main(){
     seq[1] = true;
 
     lyapunovKernelLauncher(data, seq, SEQUENCE_LENGTH,  W, H, NX, NY, NUM_ITERATIONS);
+    
     save_ppm("result.ppm", data, NX, NY);
     free(data);
     free(seq);
+    return 0;
 }
