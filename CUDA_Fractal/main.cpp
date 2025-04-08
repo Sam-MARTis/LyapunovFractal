@@ -5,13 +5,19 @@
 #include <iostream>
 #include <fstream>
 #include <cstdint>
-#define W 16.0f
-#define H 16.0f
+#include <sstream>
+#include <string>
+#include <iomanip>
+#include <cstdint>
+#define W 8.f
+#define H 8.f
+#define XMIN -0.2f
+#define YMIN -0.2f
 #define NX 128*16
 #define NY 128*16
-#define SEQUENCE_LENGTH 2
 
-#define NUM_ITERATIONS 2000
+
+#define NUM_ITERATIONS 20000
 
 
 void save_pgm(const char *filename, unsigned char *data, int width, int height) {
@@ -48,13 +54,39 @@ void save_ppm(const char* filename, uchar4* data, int width, int height) {
 
 int main(){
     uchar4 *data = (uchar4*)malloc(NX*NY*sizeof(uchar4));
-    bool *seq = (bool*)malloc(2 * sizeof(bool));
-    seq[0] = true;
-    seq[1] = false;
+    char order[] = "AB";
+    int charLen = sizeof(order)/sizeof(order[0]);
+    bool *seq = (bool*)malloc(charLen * sizeof(bool));
+    for (int i = 0; i < charLen; i++) {
+        if (order[i] == 'A') {
+            seq[i] = true;
+        } else {
+            seq[i] = false;
+        }
+    }
 
-    lyapunovKernelLauncher(data, seq, SEQUENCE_LENGTH,  W, H, NX, NY, NUM_ITERATIONS);
-    
-    save_ppm("result.ppm", data, NX, NY);
+    // seq[0] = true;
+    // seq[1] = false;
+
+    std::ostringstream filename;
+    filename << "seq-" << order
+             << "_iters-" << NUM_ITERATIONS
+             << std::fixed << std::setprecision(2)
+             << "_xmin-" << XMIN
+             << "_ymin-" << YMIN
+             << "_w-" << W
+             << "_h-" << H
+             << "_nx-" << NX
+             << "_ny-" << NY
+             << ".ppm";
+
+    std::string fname = filename.str(); 
+
+    lyapunovKernelLauncher(data, seq, charLen, XMIN, YMIN, W, H, NX, NY, NUM_ITERATIONS);
+    save_ppm(filename.str().c_str(), data, NX, NY);
+    // lyapunovKernelLauncher(data, seq, SEQUENCE_LENGTH, XMIN, YMIN, W, H, NX, NY, NUM_ITERATIONS);
+
+    save_ppm(fname.c_str(), data, NX, NY);
     free(data);
     free(seq);
     return 0;
