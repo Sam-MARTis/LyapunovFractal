@@ -1,6 +1,6 @@
-## Lyapunov's fractals and iterative maps
+## [Lyapunov's fractals and iterative maps](https://sam-martis.github.io/LyapunovFractal/)
 
-The orbit diagram plotter demo can be viewed here: 
+The orbit diagram plotter demo can be viewed here: [https://sam-martis.github.io/LyapunovFractal/](https://sam-martis.github.io/LyapunovFractal/)
 
 The iterative map $x_{n+1} = rx_n(1-x_n)$ orbit is plotted to give the famous orbit diagram. 
 
