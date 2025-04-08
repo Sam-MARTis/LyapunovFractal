@@ -1,6 +1,10 @@
 #include "kernel.h"
+#include <curand.h>
+#include <curand_kernel.h>
+
 #define TX 32
 #define TY 32
+#define seed 42
 
 int divUp(int a, int b){
     return (a-1+b)/b;
@@ -27,7 +31,13 @@ void lyapunovCalcKernel(uchar4 *d_out, bool *seq, int seqLen, float dx, float dy
             seqArr[i] = B;
         }
     }
+    float sum=0;
+    curandState state;
+    curand_init(seed, xIdx, yIdx, &state);
+    float x = curand_uniform(&state)*0.99;
+
     
+
 }
 
 
