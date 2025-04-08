@@ -8,8 +8,6 @@ if(!ctx){
 }
 
 
-
-const xlen = 4 //From  0 to 4
 //Step size
 const RSU_W = 0.8 //Ratio of screen width used
 const RSU_H = 0.8 //Ratio of screen height used
@@ -98,26 +96,38 @@ const render = (rVals: number[], convergeIterations: number, outputIterations: n
         ctx.fillStyle = "white";
         for(let j = 0; j< finalXVals.length; j++){
             const yPos = canvas.height-yPad - (finalXVals[j] * yScale);
-            ctx.fillRect(xPos, yPos, 0.5, 0.1);          
+            ctx.fillRect(xPos, yPos, 0.1, 0.1);          
         }
 
    
     }
-    ctx.fillStyle = "green";
+    ctx.beginPath();
+    ctx.strokeStyle = "blue";
+    const yRef = canvas.height - yPad*3;
+    ctx.moveTo(xPad, yRef);
+    ctx.lineTo(canvas.width-xPad, yRef);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(xPad, yRef);
+    ctx.strokeStyle = "green";
+    ctx.moveTo(xPad, canvas.height-yPad);
     for(let j = 0; j< rVals.length; j++){
-        const yPos = canvas.height-yPad - (lyapunovExps[j] * yScale);
+        const yPos = yRef - (lyapunovExps[j] * yScale)/10;
         const xPos = xPad + (rVals[j]-rmin) * xScale;
-        ctx.fillRect(xPos, yPos, 0.5, 0.1);
+        ctx.lineTo(xPos, yPos);
+        ctx.moveTo(xPos, yPos);
+
 
     }
+    ctx.stroke();
     console.log("done");
 }
 
-const dr = 0.001 
+const dr = 0.002 
 
-const rVals = initializeXAxis(2.5, 4, dr);
-const convergeIterations = 200;
-const outputIterations = 1000;
+const rVals = initializeXAxis(0, 4, dr);
+const convergeIterations = 400;
+const outputIterations = 2000;
 // const iterations = 1000;
 
 render(rVals, convergeIterations, outputIterations);
