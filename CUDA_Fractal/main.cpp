@@ -49,8 +49,8 @@ void save_ppm(const char* filename, uchar4* data, int width, int height) {
 int main(){
     uchar4 *data = (uchar4*)malloc(NX*NY*sizeof(uchar4));
     bool *seq = (bool*)malloc(2 * sizeof(bool));
-    seq[0] = false;
-    seq[1] = true;
+    seq[0] = true;
+    seq[1] = false;
 
     lyapunovKernelLauncher(data, seq, SEQUENCE_LENGTH,  W, H, NX, NY, NUM_ITERATIONS);
     
