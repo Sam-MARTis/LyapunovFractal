@@ -19,11 +19,15 @@ __global__
 void lyapunovCalcKernel(uchar4 *d_out, bool *seq, int seqLen, float dx, float dy, int n, int m, int numIterations){
     const int xIdx = threadIdx.x + blockDim.x*blockIdx.x;
     const int yIdx = threadIdx.y + blockDim.y*blockIdx.y;
+    if((xIdx>=n) || (yIdx>=m)) return;
+    const int idx = xIdx + yIdx*n;
+
+    const int SL = seqLen;
     const float A = ((float)xIdx)*dx;
     const float B = ((float)yIdx)*dy;
     int seqIterator = 0;
-    float seqArr[seqLen] = {0.0};
-    for(int i=0; i<seqLen; i++){
+    float seqArr[SL] = {0.0};
+    for(int i=0; i<SL; i++){
         if(seq[i]){
             seqArr[i] = A;
         }
@@ -31,10 +35,38 @@ void lyapunovCalcKernel(uchar4 *d_out, bool *seq, int seqLen, float dx, float dy
             seqArr[i] = B;
         }
     }
-    float sum=0;
+    
     curandState state;
     curand_init(seed, xIdx, yIdx, &state);
-    float x = curand_uniform(&state)*0.99;
+    float x = curand_uniform(&state)*0.9999; // To handle edge case when curand returns 1
+    float sum=x;
+    int j = 0;
+    for(int i=0; i<numIterations; i++){
+        
+        x = seqArr[j]*x*(1-x);
+        sum += log(abs(seqArr[j]*(1-2*x)));
+        j = (j+1)%SL;
+    }
+    const float lyapunovExponent =sum/((float)SL);
+    
+    if(lyapunovExponent<0){
+        const int intensity = clip(round(-lyapunovExponent*255.0f));
+        d_out[idx].x = clip(255 - intensity);
+        d_out[idx].y = clip(255-intensity);
+        d_out[idx].z = 0;
+    }
+    else{
+        const int intensity = clip(round(lyapunovExponent*255.0f));
+        d_out[idx].x = 0;
+        d_out[idx].y = 0;
+        d_out[idx].z = clip(255-intensity);
+    }
+
+    d_out[idx].w = 1;
+
+
+
+
 
     
 
@@ -46,6 +78,7 @@ void lyapunovKernelLauncher(uchar4 *out, bool *sequence, int sequenceLength, int
     uchar4 *d_out = 0;
     bool *d_seq = 0;
     cudaMalloc(&d_seq, sequenceLength*sizeof(bool));
+    cudaMemcpy(d_seq, sequence, sequenceLength*sizeof(bool), cudaMemcpyHostToDevice);
     cudaMalloc(&d_out, n*m*sizeof(uchar4));
     float dx = ((float)width)/((float)n);
     float dy = ((float)height)/((float)m);
@@ -53,8 +86,9 @@ void lyapunovKernelLauncher(uchar4 *out, bool *sequence, int sequenceLength, int
     const dim3 gridSize(divUp(n, TX), divUp(m, TY));
 
     lyapunovCalcKernel<<<gridSize, blockSize>>>(d_out, d_seq, sequenceLength,dx, dy, n, m, numIterations);
-    memccpy(out, d_out, n*m*sizeof(uchar4), cudaMemcpyDeviceToHost);
+    cudaMemcpy(out, d_out, n*m*sizeof(uchar4), cudaMemcpyDeviceToHost);
     cudaFree(d_out);
+    cudaFree(d_seq);
 }
 
 
