@@ -42,9 +42,9 @@ void save_ppm(const char* filename, uchar4* data, int width, int height) {
 
     out << "P6\n" << width << " " << height << "\n255\n";
     for (int i = 0; i < width * height; ++i) {
-        out.put(data[i].x);  // R
-        out.put(data[i].y);  // G
-        out.put(data[i].z);  // B
+        out.put(data[i].x); 
+        out.put(data[i].y); 
+        out.put(data[i].z); 
 
     }
 
@@ -65,8 +65,6 @@ int main(){
         }
     }
 
-    // seq[0] = true;
-    // seq[1] = false;
 
     std::ostringstream filename;
     filename << "seq-" << order
@@ -84,7 +82,6 @@ int main(){
 
     lyapunovKernelLauncher(data, seq, charLen, XMIN, YMIN, W, H, NX, NY, NUM_ITERATIONS);
     save_ppm(filename.str().c_str(), data, NX, NY);
-    // lyapunovKernelLauncher(data, seq, SEQUENCE_LENGTH, XMIN, YMIN, W, H, NX, NY, NUM_ITERATIONS);
 
     save_ppm(fname.c_str(), data, NX, NY);
     free(data);
