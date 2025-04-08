@@ -5,13 +5,13 @@
 #include <iostream>
 #include <fstream>
 #include <cstdint>
-#define W 10.0f
-#define H 10.0f
-#define NX 128*8
-#define NY 128*8
+#define W 16.0f
+#define H 16.0f
+#define NX 128*16
+#define NY 128*16
 #define SEQUENCE_LENGTH 2
 
-#define NUM_ITERATIONS 1000
+#define NUM_ITERATIONS 2000
 
 
 void save_pgm(const char *filename, unsigned char *data, int width, int height) {

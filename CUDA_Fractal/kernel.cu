@@ -47,28 +47,37 @@ void lyapunovCalcKernel(uchar4 *d_out, bool *seq, int seqLen, float dx, float dy
     int j = 0;
     // printf("seqArr[0] = %f\n", seqArr[0]);
     // printf("seqArr[1] = %f\n", seqArr[1]);
+    for(int i=0; i<numIterations/20; i++ ){
+        x = seqArr[j]*x*(1-x);
+        j = (j+1)%SL;
+    }
     for(int i=0; i<numIterations; i++){
         
         x = seqArr[j]*x*(1-x);
         sum += log(abs(seqArr[j]*(1-2*x)));
+        if(sum==INFINITY){
+            // printf("Sum is infinity\n");
+            // break;
+            return;
+        }
         j = (j+1)%SL;
     }
     // printf("Sum: %f\n", sum);
     // printf("SL: %d\n", SL);
-    const float lyapunovExponent =sum/((float)SL);
+    const float lyapunovExponent = sum/((float)numIterations);
     // printf("Lyapunov exponent at (%d, %d): %f\n", xIdx, yIdx, lyapunovExponent);
 
     // printf("Lyapunov exponent at (%d, %d): %f\n", xIdx, yIdx, lyapunovExponent);
     if(lyapunovExponent<0){
-        const int intensity = clip(round(-lyapunovExponent));
+        const int intensity = clip(round(255* (-lyapunovExponent)));
         d_out[idx].x = clip(255 - intensity);
         d_out[idx].y = clip(255-intensity);
-        d_out[idx].z = 0;
+        d_out[idx].z = 10;
     } 
     else{
-        const int intensity = clip(round(lyapunovExponent));
-        d_out[idx].x = 0;
-        d_out[idx].y = 0;
+        const int intensity = clip(round(255* (lyapunovExponent)));
+        d_out[idx].x = 10;
+        d_out[idx].y = 10;
         d_out[idx].z = clip(255-intensity);
     }
 
