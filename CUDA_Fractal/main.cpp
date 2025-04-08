@@ -9,6 +9,7 @@
 #define H 256
 #define NX 256
 #define NY 256
+#define SEQUENCE_LENGTH 2
 
 #define NUM_ITERATIONS 1000
 
@@ -50,7 +51,8 @@ int main(){
     bool *seq = (bool*)malloc(2 * sizeof(bool));
     seq[0] = false;
     seq[1] = true;
-    lyapunovKernelLauncher(data, seq, W, H, NX, NY, NUM_ITERATIONS);
+
+    lyapunovKernelLauncher(data, seq, SEQUENCE_LENGTH,  W, H, NX, NY, NUM_ITERATIONS);
     save_ppm("result.ppm", data, NX, NY);
     free(data);
     free(seq);
