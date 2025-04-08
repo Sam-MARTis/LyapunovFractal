@@ -48,6 +48,36 @@ const initializeXAxis = (rmax: number, rmin: number, dx: number):number[] => {
     }
     return xVals;
 }
+const render = (rVals: number[], convergeIterations: number, outputIterations: number): void => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 1;
+    const xScale = RSU_W*canvas.width / (rVals.length);
+    const yScale = RSU_H*canvas.height;
+    const xPad = canvas.width * (1 - RSU_W) / 2;
+    const yPad = canvas.height * (1 - RSU_H) / 2;
+    const randomInitials = new Array(rVals.length).fill(null);
+    for(let i = 0; i < rVals.length; i++){
+        randomInitials[i] = Math.random();
+    }
+    for(let i = 0; i < rVals.length; i++){
+        const r = rVals[i];
+        const x = performItertations(randomInitials[i], r, convergeIterations, 1)[0];
+        const finalXVals = performItertations(x, r, outputIterations, outputIterations);
+        const xPos = xPad+ r * xScale;
+        
+        for(let j = 0; j< finalXVals.length; j++){
+            const yPos = canvas.height-yPad - (finalXVals[j] * yScale);
+            ctx.fillStyle = "white";
+            ctx.fillRect(xPos, yPos, xScale, yScale);
+            // ctx.strokeStyle = "black";
+            // ctx.strokeRect(xPos, yPos, xScale, yScale);
+            
+        }
+    }
+}
 
 
 
