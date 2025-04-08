@@ -112,10 +112,10 @@ const render = (rVals: number[], convergeIterations: number, outputIterations: n
         console.log("r", r);
         console.log("RandomInitials", randomInitials[i]);
         
-        const x = performItertationMap(randomInitials[i], r, convergeIterations, 3)[0];
+        const x = performItertationMap(randomInitials[i], r, outputIterations, outputIterations);
         // console.log("x", x);
-        const finalXVals = performItertationMap(x, r, outputIterations, outputIterations);
-        lyapunovExps[i] = calculateLyapunov(r, finalXVals);
+        const finalXVals = x.slice(convergeIterations);
+        lyapunovExps[i] = calculateLyapunov(r, x);
         // console.log(finalXVals)
         const xPos = xPad+ (r-rmin) * xScale;
         
